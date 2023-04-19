@@ -1,9 +1,24 @@
 import torchtext
 from torchtext.data.utils import get_tokenizer
 from torchtext.vocab import build_vocab_from_iterator
+import re
+import string
+import nltk
+
 
 class TextPreprocessor:
     def __init__(self, lowercase=True, remove_punctuation=True, remove_numbers=True, remove_stopwords=True, stem_words=False, lemmatize_words=False):
+        """
+        Constructor for the TextPreprocessor class.
+
+        Args:
+        - lowercase: bool, whether to convert text to lowercase (default=True)
+        - remove_punctuation: bool, whether to remove punctuation from text (default=True)
+        - remove_numbers: bool, whether to remove numbers from text (default=True)
+        - remove_stopwords: bool, whether to remove stopwords from text (default=True)
+        - stem_words: bool, whether to stem words in text (default=False)
+        - lemmatize_words: bool, whether to lemmatize words in text (default=False)
+        """
         self.lowercase = lowercase
         self.remove_punctuation = remove_punctuation
         self.remove_numbers = remove_numbers
@@ -12,7 +27,6 @@ class TextPreprocessor:
         self.lemmatize_words = lemmatize_words
 
         if remove_stopwords or stem_words or lemmatize_words:
-            import nltk
             nltk.download('stopwords')
             nltk.download('wordnet')
             from nltk.corpus import stopwords
@@ -25,6 +39,15 @@ class TextPreprocessor:
         self.vocab = None
 
     def preprocess(self, text_data):
+        """
+        Preprocesses a list of text data.
+
+        Args:
+        - text_data: list, the list of text data to preprocess
+
+        Returns:
+        - preprocessed_data: list, the preprocessed text data
+        """
         preprocessed_data = []
         for text in text_data:
             # Convert to lowercase
